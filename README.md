@@ -10,4 +10,9 @@ Website view designed using Google's Material Framework and powered by Python/Dj
 ### Back-end
 **For a more detailed overview, please go into the back-end subfolder**
 
-Database API sitting in front of MySQL and power by Python/Flask
+Database API sitting in front of SQLite and powered by Python/Flask
+
+### Database
+**For a more detailed overview, please go into the databse subfolder**
+
+Due to limitations of hosting, we are using SQLite DB file to store data 
