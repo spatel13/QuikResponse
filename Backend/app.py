@@ -9,7 +9,7 @@ from ApiClasses.HelloWorld import HelloWorld
 
 # Setup Flask stuff
 app = Flask(__name__);
-app.config.update(TESTING='true', SECRET_KEY=b'se09u23t9o4hx0-iuf-9');
+app.config.update(TESTING='true')
 
 # Setup Flask-RESTful stuff
 api = Api(app)
