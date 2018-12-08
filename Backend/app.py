@@ -1,26 +1,27 @@
 # Base imports
 from flask import Flask
 from flask_restful import Api
-from flask_sqlalchemy import SQLAlchemy
-from ModelImports import db
-
-#Resource imports
-from ApiClasses.HelloWorld import HelloWorld
+from peewee import *
+from DbModels import database as db
 
 # Setup Flask stuff
 app = Flask(__name__);
-app.config.update(TESTING='true')
 
 # Setup Flask-RESTful stuff
-api = Api(app)
+api = Api()
 
-# Setup SQLAlchemy
-db.init_app(app)
+# Resource imports
+from UserRoute import UserRoute
 
 # Add api resources and bind to URLs
-api.add_resource(HelloWorld, '/')
+api.add_resource(UserRoute, '/')
+
+# Register all of the routes
+api.init_app(app)
 
 if __name__ == '__main__':
+   # Connect to the database
+   db.connect()
    #Run the app
    app.run(debug=True);
 
