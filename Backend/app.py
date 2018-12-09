@@ -14,7 +14,7 @@ api = Api()
 from UserRoute import UserRoute
 
 # Add api resources and bind to URLs
-api.add_resource(UserRoute, '/')
+api.add_resource(UserRoute, '/api/user', '/api/user/<int:user_id>')
 
 # Register all of the routes
 api.init_app(app)
