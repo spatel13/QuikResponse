@@ -16,7 +16,7 @@ class OpChiefRoute(Resource):
          elif lookup_by == 'id':
             op_id = int(criteria)
             the_chief = Operationschief.get_by_id(op_id)
-            return jsonify(model_to_dict(the_chief))
+            return jsonify([model_to_dict(the_chief)])
          elif lookup_by == 'userid':
             the_chiefs = Operationschief.select().join(User).where(User.id == criteria)
             if len(the_chiefs) > 0:
