@@ -19,17 +19,7 @@ class UserRoute(Resource):
             # Get a list of all of the users.
             the_users = User.select()  
          if len(the_users) > 0:
-            ret_list = [] #List with each users info (return as JSON)
-            for user in the_users:
-               # Make a dictionary with the basic info. 
-               info = model_to_dict(user)
-               # Look up location and add to user dictionary.
-               loc = Location.select().where(Location.id==user.locationID).get() 
-               if loc:
-                  info['location'] = model_to_dict(loc)
-               # TODO: Look up any other specific info and add to user dictionary.
-               ret_list.append(info)
-            return jsonify(ret_list)
+            return jsonify([model_to_dict(x) for x in the_users])
       except DoesNotExist: 
          pass
       return '', 204 

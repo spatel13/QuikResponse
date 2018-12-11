@@ -7,17 +7,20 @@ from DbModels import database as db
 from peewee import DoesNotExist
 from playhouse.shortcuts import model_to_dict
 
-# Sample resource
+# Operations Chief Route Handler
 class OpChiefRoute(Resource):
-   def get(self, op_id):
+   def get(self, lookup_by=None, criteria=None):
       try:
-         the_chief = Operationschief.get_by_id(op_id)
-         the_user = User.get_by_id(the_chief.userid)
-         the_loc = Location.get_by_id(the_user.locationid)
-         ret_dict = model_to_dict(the_chief) 
-         ret_dict['user_info'] = model_to_dict(the_user)
-         ret_dict['location_info'] = model_to_dict(the_loc)
-         return jsonify(ret_dict)
-      except DoesNotExist: 
+         if not lookup_by and not criteria:
+            return jsonify([model_to_dict(x) for x in Operationschief.select()])
+         elif lookup_by == 'id':
+            op_id = int(criteria)
+            the_chief = Operationschief.get_by_id(op_id)
+            return jsonify(model_to_dict(the_chief))
+         elif lookup_by == 'name':
+            the_chiefs = Operationschief.select().join(User).where(User.name == criteria)
+            if len(the_chiefs) > 0:
+               return jsonify([model_to_dict(x) for x in the_chiefs])
+      except DoesNotExist:
          pass
-      return '', 204 
+      return '', 204
