@@ -14,12 +14,19 @@ class RescueRequesterRoute(Resource):
       # request parser logic here for use during POST and PUT requests
       pass
 
-   def get(self, req_id):
+   def get(self, lookup_by=None, criteria=None):
       try:
-         return jsonify(model_to_dict(Rescuerequester.select(Rescuerequester.id==req_id))
-      except DoesNotExist: 
+         if not lookup_by and not criteria:
+            return jsonify([model_to_dict(x) for x in Rescuerequester.select()])
+         elif lookup_by == 'id':
+            the_id = int(criteria)
+            the_requester = Rescuerequester.get_by_id(the_id)
+            return jsonify(model_to_dict(the_requester))
+         elif lookup_by == 'name':
+            criteria = str(criteria)
+            the_requesters = [Rescuerequester.get(Rescuerequester.name == criteria)]
+            if len(the_requesters) > 0:
+               return jsonify([model_to_dict(x) for x in the_requesters])
+      except DoesNotExist:
          pass
-      return '', 204 
-
-   def post(self):
       return '', 204
