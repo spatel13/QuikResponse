@@ -15,10 +15,14 @@ class RescuerRoute(Resource):
             return jsonify([model_to_dict(x) for x in Rescuer.select()])
          elif lookup_by == 'id':
             rescuer_id = int(criteria)
-            the_rescuer= Operationschief.get_by_id(rescuer_id)
+            the_rescuer= Rescuer.get_by_id(rescuer_id)
             return jsonify(model_to_dict(the_rescuer))
+         elif lookup_by == 'userid':
+            the_rescuers = Rescuer.select().join(User).where(User.id == criteria)
+            if len(the_rescuers) > 0:
+               return jsonify([model_to_dict(x) for x in the_rescuers])
          elif lookup_by == 'name':
-            the_rescuers = Operationschief.select().join(User).where(User.name == criteria)
+            the_rescuers = Rescuer.select().join(User).where(User.name == criteria)
             if len(the_rescuers) > 0:
                return jsonify([model_to_dict(x) for x in the_rescuers])
       except DoesNotExist:
