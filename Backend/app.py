@@ -14,11 +14,15 @@ api = Api()
 from UserRoute import UserRoute
 from OpChiefRoute import OpChiefRoute
 from RescueRequesterRoute import RescueRequesterRoute
+from LocationRoute import LocationRoute
+from RescuerRoute import RescuerRoute
 
 # Add api resources and bind to URLs
 api.add_resource(UserRoute, '/api/user', '/api/user/<int:user_id>')
 api.add_resource(OpChiefRoute, '/api/opchief', '/api/opchief/<string:lookup_by>/<string:criteria>')
+api.add_resource(RescuerRoute, '/api/rescuer', '/api/rescuer/<string:lookup_by>/<string:criteria>')
 api.add_resource(RescueRequesterRoute, '/api/rescuerequester', '/api/rescuerequester/<string:lookup_by>/<string:criteria>')
+api.add_resource(LocationRoute, '/api/location')
 
 # Register all of the routes
 api.init_app(app)
