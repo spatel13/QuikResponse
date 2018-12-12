@@ -28,7 +28,8 @@ api.add_resource(InventoryItemRoute, '/api/inventory', \
    '/api/inventory/<string:lookup_by>/<string:criteria_1>', \
    '/api/inventory/<string:lookup_by>/<string:criteria_1>/<string:criteria_2>')
 api.add_resource(LocationRoute, '/api/location', '/api/location/id/<int:loc_id>')
-api.add_resource(MissionRoute, '/api/mission')
+api.add_resource(MissionRoute, '/api/mission', '/api/mission/<int:mission_id>', \
+'/api/mission/<int:mission_id>/<string:target>')
 
 # Register all of the routes
 api.init_app(app)

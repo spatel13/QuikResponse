@@ -3,47 +3,52 @@ from flask_restful import Resource
 from flask import jsonify
 from DbModels import Mission 
 from DbModels import Missioninventory
+from DbModels import Inventoryitem
 from DbModels import Missionrequests
+from DbModels import Rescuerequest
 from DbModels import Missionstatuses
 from DbModels import Rescuermissionassignments
+from DbModels import Rescuer
 from DbModels import database as db
 from peewee import DoesNotExist
 from playhouse.shortcuts import model_to_dict
 
-def lookup_linked_entries(mission):
-   # Get all of the linked entries.
-   try:
-      inventory = Missioninventory.select().join(Mission).where(Mission.id == mission.id)
-      requests = Missionrequests.select().join(Mission).where(Mission.id == mission.id)
-      status = Missionstatuses.select().join(Mission).where(Mission.id== mission.id)
-      rescuers = Rescuermissionassignments.select().join(Mission).where(Mission.id == mission.id)
-      dict_mission = model_to_dict(mission)
-      if len(inventory) > 0:
-         dict_mission['inventory'] = [model_to_dict(x) for x in inventory]
-         for entry in dict_mission['inventory']:
-            del entry['missionid']
-      if len(requests) > 0:
-         dict_mission['requests'] = [model_to_dict(x) for x in requests]
-         for entry in dict_mission['requests']:
-            del entry['missionid']
-      if len(status) > 0:
-         dict_mission['status'] = [model_to_dict(x) for x in status]
-         for entry in dict_mission['status']:
-            del entry['missionid']
-      if len(rescuers) > 0:
-         dict_mission['rescuers'] = [model_to_dict(x) for x in rescuers]
-         for entry in dict_mission['rescuers']:
-            del entry['missionid']
-      return dict_mission
-   except:
-      return {'Error':'Ya Dun\'Goofed'}
-
 class MissionRoute(Resource):
-   def get(self):
+   def get(self, mission_id=None, target=None):
       try:
-         # Get a list of all of the Missions.
-         missions = Mission.select()
-         return jsonify([lookup_linked_entries(mission) for mission in missions])
+         if not mission_id and not target:
+            # Get a list of all of the Missions.
+            missions = Mission.select()
+            ret_list = []
+            for mission in missions:
+               try:
+                  ret_list.append(model_to_dict(mission))
+               except:
+                  pass
+            return jsonify(ret_list)
+         elif mission_id:
+            if not target:
+               # Get a single mission.
+               return jsonify([model_to_dict(Mission.get(Mission.id == mission_id))])
+            elif target == 'inventory':
+               # Get the mission's inventory.
+               items = Inventoryitem.select().join(Missioninventory).join(Mission).where(Mission.id == mission_id)
+               if len(items) > 0:
+                  return jsonify([model_to_dict(x) for x in items])
+            elif target == 'rescuers':
+               # Get assigned rescuers.
+               rescuers = Rescuer.select().join(Rescuermissionassignments).join(Mission).where(Mission.id == mission_id)
+               if len(rescuers) > 0:
+                  return jsonify([model_to_dict(x) for x in rescuers])
+            elif target == 'status':
+               # Get mission status.
+               status = Status.select().join(Missionstatuses).join(Mission).get().where(Mission.id == mission_id)
+               return jsonify([status])
+            elif target == 'requests':
+               # Get assigned requests.
+               requests = Rescuerequest.select().join(Missionrequests).join(Mission).where(Mission.id == mission_id)
+               if len(requests) > 0:
+                  return jsonify([model_to_dict(x) for x in requests])
       except DoesNotExist:
          pass
       return '', 204
