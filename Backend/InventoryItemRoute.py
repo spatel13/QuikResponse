@@ -1,8 +1,9 @@
-from flask_restful import Resource
-from flask import jsonify
+import pdb
+from flask_restful import Resource, reqparse
+from flask import jsonify, Request
 from DbModels import Inventoryitem 
 from DbModels import database as db
-from peewee import DoesNotExist
+from peewee import DoesNotExist, IntegrityError
 from playhouse.shortcuts import model_to_dict
 
 class InventoryItemRoute(Resource):
@@ -24,3 +25,33 @@ class InventoryItemRoute(Resource):
       except DoesNotExist:
          pass
       return '', 204
+
+   def post(self, lookup_by=None, criteria_1=None, criteria_2=None):
+      if lookup_by or criteria_1 or criteria_2:
+         return '', 400
+      try:
+         # Parse the arguments.
+         parser = reqparse.RequestParser()
+         parser.add_argument('details')
+         parser.add_argument('isperishable')
+         parser.add_argument('name')
+         parser.add_argument('type')
+         parser.add_argument('weight')
+         args = parser.parse_args()
+         # Load 'em into a DB model.
+         entry = Inventoryitem(**args)
+         # Debug: Failing on entry.save()
+         pdb.set_trace()
+         print(entry.isperishable)
+         entry.save()
+         if entry.save():
+            # Great! Send back a copy to confirm.
+            return model_to_dict([entry])
+         else:
+            # Not great! Let 'em know ya dun goofed.
+            pass
+      except IntegrityError:
+         return jsonify({'Error':'Ya Dun Goofed.'})
+      except:
+         pass
+      return '', 500
