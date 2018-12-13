@@ -38,6 +38,8 @@ class InventoryItemRoute(Resource):
          parser.add_argument('type')
          parser.add_argument('weight')
          args = parser.parse_args()
+         # Need to manually set ID due to database layout and peewee's way of handling ids.
+         # So, figure out the id to use.
          # Load 'em into a DB model.
          entry = Inventoryitem(\
             details=args['details'],\
@@ -45,14 +47,9 @@ class InventoryItemRoute(Resource):
             name=args['name'],\
             type=args['type'],\
             weight=args['weight'],\
-            id=666
             )
-# We got problems.
-# Can't insert. Get error on NULL key.
-# Manually setting or allowing peewee to increment the id doesn't fix this.
-# Might just have to write raw SQL (ugh).
          pdb.set_trace()
-         if entry.create():
+         if entry.save(force_insert=True):
             # Great! Send back a copy to confirm.
             return model_to_dict([entry])
          else:
