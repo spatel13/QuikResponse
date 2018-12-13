@@ -77,14 +77,12 @@ class InventoryItemRoute(Resource):
          parser.add_argument('id')
          args = parser.parse_args()
          # Lookup the matching entry and update it's values.
-         pdb.set_trace()
          entry = Inventoryitem.get_by_id(int(args['id']))
          entry.details=args['details']
          entry.isperishable=args['isperishable']
          entry.name=args['name']
          entry.type=args['type']
          entry.weight=args['weight']
-         pdb.set_trace()
          if entry.save():
             # Great! Send back a copy to confirm.
             return jsonify(model_to_dict(entry))
