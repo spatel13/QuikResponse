@@ -21,7 +21,7 @@ class RescueRequesterRoute(Resource):
          elif lookup_by == 'id':
             the_id = int(criteria)
             the_requester = Rescuerequester.get_by_id(the_id)
-            return jsonify(model_to_dict(the_requester))
+            return jsonify([model_to_dict(the_requester)])
          elif lookup_by == 'name':
             criteria = str(criteria)
             the_requesters = [Rescuerequester.get(Rescuerequester.name == criteria)]

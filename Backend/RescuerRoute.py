@@ -16,7 +16,7 @@ class RescuerRoute(Resource):
          elif lookup_by == 'id':
             rescuer_id = int(criteria)
             the_rescuer= Rescuer.get_by_id(rescuer_id)
-            return jsonify(model_to_dict(the_rescuer))
+            return jsonify([model_to_dict(the_rescuer)])
          elif lookup_by == 'userid':
             the_rescuers = Rescuer.select().join(User).where(User.id == criteria)
             if len(the_rescuers) > 0:
