@@ -52,3 +52,62 @@ class MissionRoute(Resource):
       except DoesNotExist:
          pass
       return '', 204
+
+
+   def post(self, mission_id=None, target=None):
+      if mission_id or target:
+         return '', 400
+      try:
+         # Parse the arguments.
+         parser = reqparse.RequestParser()
+         parser.add_argument('datecreated')
+         parser.add_argument('details')
+         parser.add_argument('createdby')
+         args = parser.parse_args()
+         # Figure out a good id to use for our new item.
+         max_id = Mission.select(fn.MAX(Rescuerequest.id)).scalar()
+         args['id'] = max_id+1
+         # Load 'em into a DB model.
+         entry = Mission(**args)
+         if entry.save(force_insert=True):
+            # Great! Send back a copy to confirm.
+            # BUT...have to get the actual id (the id in the current entry gets set to the rowid in sqlite).
+            entry.id = max_id+1
+            return jsonify(model_to_dict(entry))
+         else:
+            # Not great! Let 'em know ya dun goofed.
+            pass
+      except IntegrityError:
+         return jsonify({'Error':'Ya Dun Goofed.'})
+      except:
+         pass
+      return '', 500
+
+   def put(self, mission_id=None, target=None):
+      if lookup_by or criteria:
+         return '', 400
+      try:
+         # Parse the arguments.
+         parser = reqparse.RequestParser()
+         parser.add_argument('datecreated')
+         parser.add_argument('details')
+         parser.add_argument('createdby')
+         parser.add_argument('id')
+         args = parser.parse_args()
+         # Lookup the matching entry and update it's values.
+         entry = Mission.get_by_id(int(args['id']))
+         entry['datecreated'] = args['datecreated']
+         entry['details'] = args['details']
+         entry['createdby'] = args['createdby']
+         if entry.save():
+            # Great! Send back a copy to confirm.
+            return jsonify(model_to_dict(entry))
+         else:
+            # Not great! Let 'em know ya dun goofed.
+            pass
+      except IntegrityError:
+         return jsonify({'Error':'Ya Dun Goofed.'})
+      except:
+         pass
+      return '', 500
+
