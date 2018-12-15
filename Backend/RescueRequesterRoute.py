@@ -71,10 +71,12 @@ class RescueRequesterRoute(Resource):
          parser.add_argument('phoneNumber')
          parser.add_argument('id')
          args = parser.parse_args()
-         # Figure out a good id to use for our new item.
-         max_id = Rescuerequester.select(fn.MAX(Rescuerequester.id)).scalar()
-         # Load 'em into a DB model.
-         entry = Rescuerequester(**args)
+         entry = Rescuerequester.get_by_id(int(args['id']))
+         entry.emergencyContactName          = args['emergencyContactName']
+         entry.emergencyContactNum           = args['emergencyContactNum'] 
+         entry.emergencyContactRelationship  = args['emergencyContactRelationship'] 
+         entry.name                          = args['name']
+         entry.phoneNumber                   = args['phoneNumber']
          if entry.save():
             # Great! Send back a copy to confirm.
             return jsonify(model_to_dict(entry))

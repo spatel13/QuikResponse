@@ -14,8 +14,6 @@ from playhouse.shortcuts import model_to_dict
 
 class MissionInventoryRoute(Resource):
    def post(self):
-      if mission_id or target:
-         return '', 400
       try:
          # Parse the arguments.
          parser = reqparse.RequestParser()
@@ -42,8 +40,6 @@ class MissionInventoryRoute(Resource):
       return '', 500
 
    def put(self):
-      if lookup_by or criteria:
-         return '', 400
       try:
          # Parse the arguments.
          parser = reqparse.RequestParser()
@@ -53,8 +49,8 @@ class MissionInventoryRoute(Resource):
          args = parser.parse_args()
          # Lookup the matching entry and update it's values.
          entry = Missioninventory.get_by_id(int(args['id']))
-         entry['itemid'] = args['itemid']
-         entry['missionid'] = args['missionid']
+         entry.itemid = args['itemid']
+         entry.missionid = args['missionid']
          if entry.save():
             # Great! Send back a copy to confirm.
             return jsonify(model_to_dict(entry))

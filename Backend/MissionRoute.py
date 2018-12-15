@@ -96,9 +96,9 @@ class MissionRoute(Resource):
          args = parser.parse_args()
          # Lookup the matching entry and update it's values.
          entry = Mission.get_by_id(int(args['id']))
-         entry['datecreated'] = args['datecreated']
-         entry['details'] = args['details']
-         entry['createdby'] = args['createdby']
+         entry.datecreated = args['datecreated']
+         entry.details = args['details']
+         entry.createdby = args['createdby']
          if entry.save():
             # Great! Send back a copy to confirm.
             return jsonify(model_to_dict(entry))
