@@ -65,7 +65,7 @@ class MissionRoute(Resource):
          parser.add_argument('createdby')
          args = parser.parse_args()
          # Figure out a good id to use for our new item.
-         max_id = Mission.select(fn.MAX(Rescuerequest.id)).scalar()
+         max_id = Mission.select(fn.MAX(Mission.id)).scalar()
          args['id'] = max_id+1
          # Load 'em into a DB model.
          entry = Mission(**args)

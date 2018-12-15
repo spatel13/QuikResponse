@@ -10,10 +10,6 @@ from playhouse.shortcuts import model_to_dict
 
 # Sample resource
 class RescueRequesterRoute(Resource):
-   def __init__(self):
-      # request parser logic here for use during POST and PUT requests
-      pass
-
    def get(self, lookup_by=None, criteria=None):
       try:
          if not lookup_by and not criteria:
@@ -30,3 +26,63 @@ class RescueRequesterRoute(Resource):
       except DoesNotExist:
          pass
       return '', 204
+
+   def post(self, lookup_by=None, criteria=None):
+      if lookup_by or criteria:
+         return '', 400
+      try:
+         # Parse the arguments.
+         parser = reqparse.RequestParser()
+         parser.add_argument('emergencyContactName')
+         parser.add_argument('emergencyContactNum')
+         parser.add_argument('emergencyContactRelationship')
+         parser.add_argument('name')
+         parser.add_argument('phoneNumber')
+         args = parser.parse_args()
+         # Figure out a good id to use for our new item.
+         max_id = Rescuerequester.select(fn.MAX(Rescuerequester.id)).scalar()
+         args['id'] = max_id + 1
+         # Load 'em into a DB model.
+         entry = Rescuerequester(**args)
+         if entry.save(force_insert=True):
+            # Great! Send back a copy to confirm.
+            # BUT...have to get the actual id (the id in the current entry gets set to the rowid in sqlite).
+            entry.id = max_id+1
+            return jsonify(model_to_dict(entry))
+         else:
+            # Not great! Let 'em know ya dun goofed.
+            pass
+      except IntegrityError:
+         return jsonify({'Error':'Ya Dun Goofed.'})
+      except:
+         pass
+      return '', 500
+
+   def put(self, lookup_by=None, criteria=None):
+      if lookup_by or criteria:
+         return '', 400
+      try:
+         # Parse the arguments.
+         parser = reqparse.RequestParser()
+         parser.add_argument('emergencyContactName')
+         parser.add_argument('emergencyContactNum')
+         parser.add_argument('emergencyContactRelationship')
+         parser.add_argument('name')
+         parser.add_argument('phoneNumber')
+         parser.add_argument('id')
+         args = parser.parse_args()
+         # Figure out a good id to use for our new item.
+         max_id = Rescuerequester.select(fn.MAX(Rescuerequester.id)).scalar()
+         # Load 'em into a DB model.
+         entry = Rescuerequester(**args)
+         if entry.save():
+            # Great! Send back a copy to confirm.
+            return jsonify(model_to_dict(entry))
+         else:
+            # Not great! Let 'em know ya dun goofed.
+            pass
+      except IntegrityError:
+         return jsonify({'Error':'Ya Dun Goofed.'})
+      except:
+         pass
+      return '', 500

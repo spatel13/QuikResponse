@@ -23,7 +23,7 @@ class MissionInventoryRoute(Resource):
          parser.add_argument('missionid')
          args = parser.parse_args()
          # Figure out a good id to use for our new item.
-         max_id = Missioninventory.select(fn.MAX(Rescuerequest.id)).scalar()
+         max_id = Missioninventory.select(fn.MAX(Missioninventory.id)).scalar()
          args['id'] = max_id+1
          # Load 'em into a DB model.
          entry = Missioninventory(**args)
