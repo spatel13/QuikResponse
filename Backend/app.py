@@ -20,6 +20,9 @@ from InventoryItemRoute import InventoryItemRoute
 from MissionRoute import MissionRoute
 from RescueRequestRoute import RescueRequestRoute
 from MissionInventoryRoute import MissionInventoryRoute
+from MissionStatusesRoute import MissionStatusesRoute
+from MissionRequestsRoute import MissionRequestsRoute
+from RescuerMissionAssignmentsRoute import RescuerMissionAssignmentsRoute
 
 # Add api resources and bind to URLs
 api.add_resource(UserRoute, '/api/user', '/api/user/id/<int:user_id>')
@@ -34,6 +37,9 @@ api.add_resource(MissionRoute, '/api/mission', '/api/mission/<int:mission_id>', 
 '/api/mission/<int:mission_id>/<string:target>')
 api.add_resource(RescueRequestRoute, '/api/request', '/api/request/<string:lookup_by>/<string:criteria>') 
 api.add_resource(MissionInventoryRoute, '/api/missioninventory')
+api.add_resource(MissionStatusesRoute, '/api/missionstatus')
+api.add_resource(MissionRequestsRoute, '/api/missionrequest')
+api.add_resource(RescuerMissionAssignmentsRoute, '/api/rescuermissionassignment')
 
 # Register all of the routes
 api.init_app(app)
