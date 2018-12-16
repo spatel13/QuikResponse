@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from flask import jsonify
 from DbModels import Mission 
 from DbModels import Inventoryitem
@@ -7,7 +7,7 @@ from DbModels import Missionstatuses
 from DbModels import Rescuermissionassignments
 from DbModels import Rescuer
 from DbModels import database as db
-from peewee import DoesNotExist
+from peewee import DoesNotExist, IntegrityError, fn
 from playhouse.shortcuts import model_to_dict
 
 class MissionStatusesRoute(Resource):
@@ -47,7 +47,7 @@ class MissionStatusesRoute(Resource):
          args = parser.parse_args()
          # Lookup the matching entry and update it's values.
          entry = Missionstatuses.get_by_id(int(args['id']))
-         entry.itemid = args['itemid']
+         entry.statusid = args['statusid']
          entry.missionid = args['missionid']
          if entry.save():
             # Great! Send back a copy to confirm.
