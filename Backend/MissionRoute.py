@@ -1,5 +1,5 @@
 import pdb
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from flask import jsonify
 from DbModels import Mission 
 from DbModels import Missioninventory
@@ -10,7 +10,7 @@ from DbModels import Missionstatuses
 from DbModels import Rescuermissionassignments
 from DbModels import Rescuer
 from DbModels import database as db
-from peewee import DoesNotExist
+from peewee import DoesNotExist, IntegrityError, fn
 from playhouse.shortcuts import model_to_dict
 
 class MissionRoute(Resource):
@@ -84,7 +84,7 @@ class MissionRoute(Resource):
       return '', 500
 
    def put(self, mission_id=None, target=None):
-      if lookup_by or criteria:
+      if mission_id or target:
          return '', 400
       try:
          # Parse the arguments.
