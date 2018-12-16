@@ -27,7 +27,6 @@ class RescuerMissionAssignmentsRoute(Resource):
          entry.missionid = args['missionid']
          entry.rescuerid = args['rescuerid']
          entry.id = args['id']
-         pdb.set_trace()
          if entry.save(force_insert=True):
             # Great! Send back a copy to confirm.
             # BUT...have to get the actual id (the id in the current entry gets set to the rowid in sqlite).
