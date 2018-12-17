@@ -17,7 +17,7 @@ class RescueRequestRoute(Resource):
          elif lookup_by == 'id':
             req_id = int(criteria)
             the_request = Rescuerequest.get_by_id(req_id)
-            return jsonify([model_to_dict(the_chief)])
+            return jsonify([model_to_dict(the_request)])
          elif lookup_by == 'userid':
             the_reqs = Rescuerequest.select().join(User).where(User.id == criteria)
             if len(the_reqs) > 0:
