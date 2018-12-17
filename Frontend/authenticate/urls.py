@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic.base import RedirectView
 from .views import LoginView
 
 urlpatterns = [
-    path('', LoginView.as_view(), name='Login'),
+    path('authenticate/login', LoginView.as_view(), name='Login'),
+    path('', RedirectView.as_view(url='authenticate/login', permanent=False), name="index"),
 ]
