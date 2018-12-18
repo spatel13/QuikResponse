@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Operations Chief{% endblock %}
+
+{% block navigation %}
+{% include "navbar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="opchief-home bg-white container-fluid">
+  <div class="requests bg-primary">
+    <h3>Requests</h3>
+    {% for request in requests %}
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Date: {{ request.0 }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Address: {{ request.3 }}</h6>
+          <p class="card-text">Details: {{ request.1 }}</p>
+          <p class="card-text">Severity: {{ request.11 }}</p>
+        </div>
+      </div>
+      </br>
+    {% endfor %}
+  </div>
+  <div class="mission bg-primary">
+    <h3>Ongoing Missions</h3>
+    {% for mission in missions %}
+    <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Mission Name: {{ mission.1 }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Severity: {{ mission.2 }}</h6>
+          <p class="card-text">Details: {{ mission.5 }}</p>
+          <p class="card-text">Date: {{ mission.4 }}</p>
+        </div>
+      </div>
+    </br>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

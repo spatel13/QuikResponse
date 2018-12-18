@@ -41,6 +41,7 @@ CUSTOM_APPS = [
     'QuikResponse',
     'authenticate',
     'requester',
+    'opchief',
 ]
 
 INSTALLED_APPS = BASE_APPS + CUSTOM_APPS

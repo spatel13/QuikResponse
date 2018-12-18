@@ -15,14 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from authenticate import urls as auth_urls
-from requester import urls as requester_urls
-from opchief import urls as opchief_urls
+from .views import OpChiefHomeView
 
-app_name = 'QuikResponse'
+app_name = 'opchief'
 
 urlpatterns = [
-    path('', include(auth_urls), name='auth'),
-    path('', include(requester_urls), name='requester'),
-    path('opchief/', include(opchief_urls), name='opchief'),
+    path('home', OpChiefHomeView.as_view(), name='opchief_home'),
 ]

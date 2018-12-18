@@ -1,5 +1,4 @@
 .content {
-  height: 100%;
 }
 
 .center-screen {
@@ -19,5 +18,27 @@
   margin: 0% 5% 0%;
   padding: 3%;
   width: inherit;
+  height: 91.25%;
+}
+
+.opchief-home {
+  margin: 0% 5% 0%;
+  width: inherit;
+  height: inherit;
+  display: flex;
+  flex-direction: row;
+}
+
+.requests {
+  margin: 2%;
+  padding: 2%;
+  width: 50%;
+  max-height: inherit;
+}
+
+.mission {
+  margin: 2%;
+  padding: 3%;
+  width: 50%;
   height: inherit;
 }
