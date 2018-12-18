@@ -1,4 +1,5 @@
 import pdb
+from time import gmtime, strftime
 from flask_restful import Resource, reqparse
 from flask import jsonify
 from DbModels import Rescuerequest
@@ -16,7 +17,7 @@ class RescueRequestRoute(Resource):
          elif lookup_by == 'id':
             req_id = int(criteria)
             the_request = Rescuerequest.get_by_id(req_id)
-            return jsonify([model_to_dict(the_chief)])
+            return jsonify([model_to_dict(the_request)])
          elif lookup_by == 'userid':
             the_reqs = Rescuerequest.select().join(User).where(User.id == criteria)
             if len(the_reqs) > 0:
@@ -31,7 +32,6 @@ class RescueRequestRoute(Resource):
       try:
          # Parse the arguments.
          parser = reqparse.RequestParser()
-         parser.add_argument('date')
          parser.add_argument('details')
          parser.add_argument('locationid')
          parser.add_argument('requesterid')
@@ -41,7 +41,7 @@ class RescueRequestRoute(Resource):
          max_id = Rescuerequest.select(fn.MAX(Rescuerequest.id)).scalar()
          # Load 'em into a DB model.
          entry = Rescuerequest(\
-            date=args['date'],\
+            date=strfttime("%Y-%m-%d %H:%M:%S", gmtime())\
             details=args['details'],\
             locationid=args['locationid'],\
             requesterid=args['requesterid'],\
@@ -69,7 +69,6 @@ class RescueRequestRoute(Resource):
          # Parse the arguments.
          parser = reqparse.RequestParser()
          parser.add_argument('id')
-         parser.add_argument('date')
          parser.add_argument('details')
          parser.add_argument('locationid')
          parser.add_argument('requesterid')
@@ -77,7 +76,7 @@ class RescueRequestRoute(Resource):
          args = parser.parse_args()
          # Lookup the matching entry and update it's values.
          entry = Rescuerequest.get_by_id(int(args['id']))
-         entry.date=args['date']
+         entry.date=strfttime("%Y-%m-%d %H:%M:%S", gmtime())
          entry.details=args['details']
          entry.locationid=args['locationid']
          entry.requesterid=args['requesterid']
