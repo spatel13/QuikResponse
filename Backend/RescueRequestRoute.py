@@ -41,13 +41,14 @@ class RescueRequestRoute(Resource):
          max_id = Rescuerequest.select(fn.MAX(Rescuerequest.id)).scalar()
          # Load 'em into a DB model.
          entry = Rescuerequest(\
-            date=strfttime("%Y-%m-%d %H:%M:%S", gmtime())\
+            date=strfttime("%Y-%m-%d %H:%M:%S", gmtime()),\
             details=args['details'],\
             locationid=args['locationid'],\
             requesterid=args['requesterid'],\
             severity=args['severity'],\
-            id=max_id+1
+            id=max_id+1\
             )
+         entry.id = max_id+1
          if entry.save(force_insert=True):
             # Great! Send back a copy to confirm.
             # BUT...have to get the actual id (the id in the current entry gets set to the rowid in sqlite).
