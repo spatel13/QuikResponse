@@ -14,13 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.views.generic.base import RedirectView
-from .views import LoginView
+from django.urls import path, include
+from .views import RequesterView
 
-namespace='authenticate'
+app_name = 'requester'
 
 urlpatterns = [
-    path('authenticate/login', LoginView.as_view(), name='Login'),
-    path('', RedirectView.as_view(url='authenticate/login', permanent=False), name="index"),
+    path('requester', RequesterView.as_view(), name='requester_form'),
 ]

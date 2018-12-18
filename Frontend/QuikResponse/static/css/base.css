@@ -14,3 +14,10 @@
 .login-menu {
   padding: 5%;
 }
+
+.request-form {
+  margin: 0% 5% 0%;
+  padding: 3%;
+  width: inherit;
+  height: inherit;
+}

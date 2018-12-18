@@ -1,5 +1,5 @@
-from django.forms import Form, EmailField, CharField, PasswordInput
+from django import forms
 
-class LoginForm(Form):
-    email = EmailField(label="Email", required=True)
-    password = CharField(label="Password", required=True, widget=PasswordInput)
+class LoginForm(forms.Form):
+    email = forms.EmailField(label="Email", required=True)
+    password = forms.CharField(label="Password", required=True, widget=forms.PasswordInput)

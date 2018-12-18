@@ -16,7 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from authenticate import urls as auth_urls
+from requester import urls as requester_urls
+
+app_name = 'QuikResponse'
 
 urlpatterns = [
     path('', include(auth_urls), name='auth'),
+    path('home/', include(requester_urls), name='requester'),
 ]

@@ -5,12 +5,12 @@
 {% block content %}
 <div class="center-screen">
   <div class="login-menu bg-white">
+    <h4>Login</h4>
     <form action="/" method="post">
         {% csrf_token %}
         <div class="form-group">
           <label for="{{ form.email.id_for_label}}" class="bmd-label-floating">Email</label>
           <input type="email" name="email" required_id="id_email" autocomplete="off" class="form-control" id="{{ form.email.id_for_label}}">
-          <span class="bmd-help">We'll never share your email with anyone else.</span>
         </div>
         <div class="form-group">
           <label for="{{ form.password.id_for_label}}" class="bmd-label-floating">Password</label>

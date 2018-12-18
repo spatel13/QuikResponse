@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Requester{% endblock %}
+
+{% block navigation %}
+{% include "navbar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="request-form bg-white">
+  <h3>Rescue Request Form</h3>
+  <form action="{% url 'requester:requester_form' %}" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="{{ form.details.id_for_label }}">Details</label>
+        <textarea class="form-control" id="{{ form.details.id_for_label }}" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.address.id_for_label }}">Address</label>
+        <input type="text" class="form-control" id="{{ form.address.id_for_label }}">
+      </div>
+      <div class="form-group">
+        <label for="{{ form.severity.id_for_label }}">Severity</label>
+        <select class="form-control" id="{{ form.severity.id_for_label }}">
+          {% for option in form.severity %}
+          <<option value="{{ option }}"></option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+  </form>
+</div>
+{% endblock %}
